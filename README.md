@@ -49,5 +49,5 @@ export KUBERNETES_POD=""
 export POSTGRES_USER="postgres"
 export POSTGRES_PORT="5432"
 
-cat dump.sql | kubectl exec -i "$KUBERNETES_POD" -- psql -h "$POSTGRES_HOST" -p "$POSTGRES_PORT" -U "$POSTGRES_USER"
+cat dump.sql | kubectl exec -i "$KUBERNETES_POD" -- PGPASSWORD="$POSTGRES_PASSWORD" psql -h "$POSTGRES_HOST" -p "$POSTGRES_PORT" -U "$POSTGRES_USER"
 ```
