@@ -25,7 +25,7 @@ export KUBERNETES_POD=""
 export POSTGRES_USER="postgres"
 export POSTGRES_PORT="5432"
 
-kubectl exec $KUBERNETES_POD -- sh -c "PGPASSWORD='$POSTGRES_PASSWORD' pg_dumpall --no-role-passwords -p '$POSTGRES_PORT' -U '$POSTGRES_USER'" > dump.sql
+kubectl exec "$KUBERNETES_POD" -- sh -c "PGPASSWORD='$POSTGRES_PASSWORD' pg_dumpall --no-role-passwords -p '$POSTGRES_PORT' -U '$POSTGRES_USER'" > dump.sql
 ```
 
 ### Restore
@@ -42,3 +42,12 @@ PGPASSWORD="$POSTGRES_PASSWORD" psql -f dump.sql -h "$POSTGRES_HOST" -p "$POSTGR
 ```
 
 #### Kubernetes
+
+```sh
+export POSTGRES_PASSWORD=""
+export KUBERNETES_POD=""
+export POSTGRES_USER="postgres"
+export POSTGRES_PORT="5432"
+
+cat dump.sql | kubectl exec -i "$KUBERNETES_POD" -- psql -h "$POSTGRES_HOST" -p "$POSTGRES_PORT" -U "$POSTGRES_USER"
+```
