@@ -14,7 +14,7 @@ export POSTGRES_USER="postgres"
 export POSTGRES_HOST="localhost"
 export POSTGRES_PORT="5432"
 
-PGPASSWORD="$POSTGRES_PASSWORD" pg_dumpall --no-role-passwords -h "$POSTGRES_HOST" -p "$POSTGRES_PASSWORD" -U "$POSTGRES_USER" > dump.sql
+PGPASSWORD="$POSTGRES_PASSWORD" pg_dumpall --no-role-passwords -h "$POSTGRES_HOST" -p "$POSTGRES_PORT" -U "$POSTGRES_USER" > dump.sql
 ```
 
 #### Kubernetes
