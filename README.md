@@ -4,7 +4,7 @@
 
 ## Postgres
 
-### Dump
+### Dump All
 
 #### Local
 
@@ -26,6 +26,20 @@ export POSTGRES_USER="postgres"
 export POSTGRES_PORT="5432"
 
 kubectl exec "$KUBERNETES_POD" -- sh -c "PGPASSWORD='$POSTGRES_PASSWORD' pg_dumpall --no-role-passwords -p '$POSTGRES_PORT' -U '$POSTGRES_USER'" > dump.sql
+```
+
+### Dump Database
+
+#### Kubernetes
+
+```sh
+export POSTGRES_PASSWORD=""
+export KUBERNETES_POD=""
+export POSTGRES_DATABASE=""
+export POSTGRES_USER="postgres"
+export POSTGRES_PORT="5432"
+
+kubectl exec "$KUBERNETES_POD" -- sh -c "PGPASSWORD='$POSTGRES_PASSWORD' pg_dump -p '$POSTGRES_PORT' -U '$POSTGRES_USER' $POSTGRES_DATABASE" > dump.sql
 ```
 
 ### Restore
