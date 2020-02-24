@@ -51,3 +51,16 @@ export POSTGRES_PORT="5432"
 
 cat dump.sql | kubectl exec -i "$KUBERNETES_POD" -- sh -c "PGPASSWORD='$POSTGRES_PASSWORD' psql -h '$POSTGRES_HOST' -p '$POSTGRES_PORT' -U '$POSTGRES_USER'"
 ```
+
+## MongoDB
+
+### Dump
+
+```sh
+export MONGODB_PASSWORD=""
+export MONGODB_USER="postgres"
+export MONGODB_HOST="localhost"
+export MONGODB_PORT="27017"
+
+mongodump --uri="mongodb://$MONGODB_USER:$MONGODB_PASSWORD@$MONGODB_HOST:$MONGODB_PORT"
+```
