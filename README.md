@@ -30,6 +30,18 @@ kubectl exec "$KUBERNETES_POD" -- sh -c "PGPASSWORD='$POSTGRES_PASSWORD' pg_dump
 
 ### Dump Database
 
+#### Local
+
+```sh
+export POSTGRES_PASSWORD=""
+export POSTGRES_DATABASE=""
+export POSTGRES_USER="postgres"
+export POSTGRES_HOST="localhost"
+export POSTGRES_PORT="5432"
+
+PGPASSWORD="$POSTGRES_PASSWORD" pg_dump -h "$POSTGRES_HOST" -p "$POSTGRES_PORT" -U "$POSTGRES_USER" "$POSTGRES_DATABASE" > dump.sql
+```
+
 #### Kubernetes
 
 ```sh
