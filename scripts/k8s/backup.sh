@@ -24,7 +24,7 @@ _backup_all_namespaces() {
 
 _backup_namespace() {
     if kubectl get secret postgres-postgres-secret -n "$NAMESPACE" >/dev/null 2>/dev/null; then
-        mkdir -p $OUTPUT_DIR
+        mkdir -p $BACKUP_DIR
         echo "backing up namespace $NAMESPACE"
         sh ./scripts/k8s/backup/postgres.sh $@
         echo "backup completed for namespace $NAMESPACE"
