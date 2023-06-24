@@ -4,7 +4,6 @@ DEFAULT_ENVIRONMENT="k8s"
 
 export _TMP_PATH="${XDG_RUNTIME_DIR:-$([ -d "/run/user/$(id -u $USER)" ] && echo "/run/user/$(id -u $USER)" || echo ${TMP:-${TEMP:-/tmp}})}/cody/wizard/$$"
 export _STATE_PATH="${XDG_STATE_HOME:-$HOME/.local/state}/dotstow"
-export _STOWED_PATH="$_STATE_PATH/stowed"
 
 main() {
     if [ "$_COMMAND" = "backup" ]; then

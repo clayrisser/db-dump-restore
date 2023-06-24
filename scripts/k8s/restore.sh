@@ -2,34 +2,25 @@
 
 main() {
     _prepare
-    if [ "$_ALL" = "1" ]; then
-        _backup_all_namespaces $@
-    else
-        _backup_namespace $@
-    fi
+    _restore_namespace $@
 }
 
 _prepare() {
     export NAMESPACE=${_NAMESPACE:-$(kubectl config view --minify --output 'jsonpath={..namespace}')}
-    export BACKUP_DIR=$(pwd)/backups/$NAMESPACE/$(date +'%s')_$(date +'%Y-%m-%d_%H-%M-%S')
+    export BACKUP_DIR="$_BACKUP"
+    if [ "$BACKUP_DIR" = "" ] || [ ! -d "$BACKUP_DIR" ]; then
+        echo "backup directory required" >&2
+        exit 1
+    fi
 }
 
-_backup_all_namespaces() {
-    for n in $(kubectl get ns | tail -n +2 | cut -d' ' -f1); do
-        export _NAMESPACE=$n
-        _prepare
-        ( _backup_namespace $@ ) || true
-    done
-}
-
-_backup_namespace() {
+_restore_namespace() {
     if kubectl get secret postgres-postgres-secret -n "$NAMESPACE" >/dev/null 2>/dev/null; then
-        mkdir -p $OUTPUT_DIR
-        echo "backing up namespace $NAMESPACE"
-        sh ./scripts/k8s/backup/postgres.sh $@
-        echo "backup completed for namespace $NAMESPACE"
+        echo "restoring namespace $NAMESPACE"
+        sh ./scripts/k8s/restore/postgres.sh $@
+        echo "restore completed for namespace $NAMESPACE"
     else
-        echo "no backup scripts for namespace $NAMESPACE" >&2
+        echo "no restore scripts for namespace $NAMESPACE" >&2
         exit 1
     fi
 }
@@ -43,8 +34,8 @@ while test $# -gt 0; do
             echo " "
             echo "options:"
             echo "    -h, --help         show brief help"
-            echo "    -n, --namespace    namespace to backup"
-            echo "    -a, --all          backup all namespaces"
+            echo "    -n, --namespace    namespace to restore"
+            echo "    -b, --backup       backup directory to restore"
             exit 0
         ;;
         -n|--namespace)
@@ -52,9 +43,10 @@ while test $# -gt 0; do
             export _NAMESPACE=$1
             shift
         ;;
-        -a|--all)
+        -b|--backup)
             shift
-            export _ALL="1"
+            export _BACKUP=$1
+            shift
         ;;
         -*)
             echo "invalid option $1" 1>&2
