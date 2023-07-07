@@ -1,6 +1,7 @@
 # db-dump-restore
 
 > scripts for dumping and restoring data from databases
+![](assets/db-dump-restore.png)
 
 ## PostgreSQL
 
